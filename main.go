@@ -28,16 +28,14 @@ var (
 )
 
 type EventsOut struct {
-	Pipeline struct {
-		Events struct {
-			Out float64 `json:"out"`
-		} `json:"events"`
-	} `json:"pipeline"`
+	Events struct {
+		Out float64 `json:"out"`
+	} `json:"events"`
 }
 
 func GetEvents(URL url.URL) (*EventsOut, error) {
 	var e EventsOut
-	URL.Path = path.Join(URL.Path, "_node/stats/pipeline")
+	URL.Path = path.Join(URL.Path, "_node/stats/events")
 	s := URL.String()
 	log.Debugf("Pulling node stats from: %s", s)
 	resp, err := http.Get(s)
@@ -90,7 +88,7 @@ func main() {
 			continue
 		}
 
-		currCount = currVals.Pipeline.Events.Out
+		currCount = currVals.Events.Out
 		if lastCount == 0 {
 			lastCount = currCount
 			<-ticker
